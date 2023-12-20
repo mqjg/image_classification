@@ -13,7 +13,7 @@ dataset_url = "https://storage.googleapis.com/download.tensorflow.org/example_im
 data_dir = tf.keras.utils.get_file('flower_photos.tar', origin=dataset_url, extract=True)
 data_dir = pathlib.Path(data_dir).with_suffix('')
 
-epochs = 10
+epochs = 5
 batch_size = 32
 img_height = 180
 img_width = 180
