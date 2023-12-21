@@ -8,9 +8,10 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
 import pathlib
+import os
+import pickle
 
-dataset_path = "../data/flower_photos"
-data_dir = pathlib.Path(dataset_path).with_suffix('')
+dataset_path = "/mnt/c/Users/mathe/work/data/flower_photos"
 
 epochs = 10
 batch_size = 32
@@ -18,7 +19,7 @@ img_height = 180
 img_width = 180
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
-  data_dir,
+  dataset_path,
   validation_split=0.2,
   subset="training",
   seed=123,
@@ -26,7 +27,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
   batch_size=batch_size)
 
 val_ds = tf.keras.utils.image_dataset_from_directory(
-  data_dir,
+  dataset_path,
   validation_split=0.2,
   subset="validation",
   seed=123,
@@ -87,12 +88,9 @@ history = model.fit(
   epochs=epochs
 )
 
-
-sunflower_url = "https://storage.googleapis.com/download.tensorflow.org/example_images/592px-Red_sunflower.jpg"
-sunflower_path = tf.keras.utils.get_file('Red_sunflower', origin=sunflower_url)
-
+test_path = "/mnt/c/Users/mathe/work/data/flower_photos/sunflowers/2979133707_84aab35b5d.jpg"
 img = tf.keras.utils.load_img(
-    sunflower_path, target_size=(img_height, img_width)
+    test_path, target_size=(img_height, img_width)
 )
 img_array = tf.keras.utils.img_to_array(img)
 img_array = tf.expand_dims(img_array, 0) # Create a batch
@@ -107,6 +105,12 @@ print(
 
 
 print("saving model to: ", end="")
-path='/mnt/c/Users/mathe/work/image_classification/model_0.hdf5'
-model.save(path)
-print(path)
+model_path='/mnt/c/Users/mathe/work/image_classification/model_0.hdf5'
+model.save(model_path)
+print(model_path)
+
+print("saving class dictionary to: ", end="")
+class_path='/mnt/c/Users/mathe/work/image_classification/model_0_labels.pickle'
+with open(class_path, 'wb+') as f:
+    pickle.dump(class_names, f)
+print(class_path)
